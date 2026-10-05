@@ -1,0 +1,1650 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Winux 11 + Polhing 1.0</title>
+
+<style>
+*{box-sizing:border-box}
+html,body{
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    font-family:Arial,sans-serif
+}
+
+#desktop{
+    position:fixed;
+    inset:0;
+    background:radial-gradient(circle at 50% 40%,#2878d8,#071a38 60%,#020611);
+    transition:.5s;
+}
+
+/* DESKTOP */
+
+.logo{
+    position:absolute;
+    top:25px;
+    left:30px;
+    color:white;
+    font-size:28px;
+    font-weight:bold;
+}
+
+.edicao{
+    position:absolute;
+    top:62px;
+    left:30px;
+    color:#c5dcff;
+    font-size:13px;
+}
+
+.icones{
+    position:absolute;
+    top:110px;
+    left:20px;
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+}
+
+.icone{
+    width:100px;
+    text-align:center;
+    color:white;
+    cursor:pointer;
+    text-shadow:1px 1px 4px #000;
+}
+
+.icone div{
+    font-size:38px;
+}
+
+.icone span{
+    font-size:12px;
+}
+
+/* JANELAS */
+
+.janela{
+    position:absolute;
+    width:650px;
+    height:450px;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    background:#101923;
+    border:1px solid #526273;
+    border-radius:14px;
+    box-shadow:0 30px 80px #000b;
+    color:white;
+    display:none;
+    overflow:hidden;
+    z-index:50;
+}
+
+.titulo{
+    height:45px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 14px;
+    background:#1b2633;
+}
+
+.fechar{
+    width:30px;
+    height:28px;
+    border:0;
+    border-radius:5px;
+    background:#e53935;
+    color:white;
+    font-size:20px;
+    cursor:pointer;
+}
+
+.conteudo{
+    padding:20px;
+}
+
+/* POLHING */
+
+#polhing{
+    width:92vw;
+    height:88vh;
+    background:#101820;
+}
+
+.polhing-top{
+    height:48px;
+    background:#171f29;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:6px 10px;
+}
+
+.polhing-logo{
+    font-weight:bold;
+    font-size:18px;
+    margin-right:10px;
+}
+
+#tabs{
+    display:flex;
+    gap:5px;
+}
+
+.tab{
+    min-width:130px;
+    height:35px;
+    padding:0 10px;
+    background:#27313d;
+    border-radius:7px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    cursor:pointer;
+}
+
+.tab.active{
+    background:#344b63;
+}
+
+.tab-close{
+    margin-left:10px;
+    color:#aaa;
+}
+
+.plus{
+    width:35px;
+    height:35px;
+    border:0;
+    border-radius:50%;
+    background:#2563eb;
+    color:white;
+    font-size:23px;
+    cursor:pointer;
+}
+
+.polhing-buttons{
+    margin-left:auto;
+    display:flex;
+    gap:5px;
+}
+
+.polhing-buttons button,
+.editor-top button{
+    background:#2563eb;
+    color:white;
+    border:0;
+    border-radius:6px;
+    padding:8px 12px;
+    cursor:pointer;
+}
+
+.endereco{
+    height:42px;
+    background:#202a36;
+    padding:6px 10px;
+    display:flex;
+    gap:8px;
+}
+
+.endereco input{
+    flex:1;
+    background:#111923;
+    color:white;
+    border:1px solid #374555;
+    border-radius:8px;
+    padding:8px;
+}
+
+.endereco button{
+    background:#2563eb;
+    color:white;
+    border:0;
+    border-radius:8px;
+    padding:0 15px;
+}
+
+#webview{
+    width:100%;
+    height:calc(100% - 90px);
+    border:0;
+    background:white;
+}
+
+/* EDITOR */
+
+#editor{
+    width:92vw;
+    height:88vh;
+}
+
+.editor-top{
+    height:48px;
+    background:#171f29;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:0 12px;
+}
+
+.editor-grid{
+    height:calc(100% - 48px);
+    display:grid;
+    grid-template-columns:1fr 1fr;
+}
+
+.codigo{
+    display:flex;
+    flex-direction:column;
+}
+
+.codigo label{
+    background:#0b1118;
+    padding:8px;
+    color:#8db7ff;
+}
+
+.codigo textarea{
+    flex:1;
+    resize:none;
+    background:#05090e;
+    color:#d5e7ff;
+    border:0;
+    outline:0;
+    padding:15px;
+    font-family:Consolas,monospace;
+    font-size:14px;
+}
+
+.preview{
+    background:white;
+    border-left:1px solid #34404e;
+}
+
+#previewFrame{
+    width:100%;
+    height:100%;
+    border:0;
+}
+
+/* SCANNER */
+
+#scanner{
+    width:700px;
+    height:500px;
+    background:#09111a;
+}
+
+.scanner-body{
+    padding:20px;
+}
+
+.scanner-status{
+    padding:15px;
+    background:#111d29;
+    border-radius:8px;
+    margin-bottom:15px;
+    font-family:monospace;
+}
+
+.progress{
+    width:100%;
+    height:15px;
+    background:#1d2935;
+    border-radius:8px;
+    overflow:hidden;
+}
+
+.progress-bar{
+    width:0;
+    height:100%;
+    background:#22c55e;
+    transition:.2s;
+}
+
+.resultados{
+    margin-top:15px;
+    background:#05090e;
+    height:280px;
+    overflow:auto;
+    padding:12px;
+    font-family:monospace;
+    font-size:13px;
+}
+
+.ok{color:#4ade80}
+.alerta{color:#facc15}
+.perigo{color:#f87171}
+
+/* WALLPAPER */
+
+.wallpapers{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+.wallpaper{
+    height:110px;
+    border-radius:10px;
+    border:2px solid #ffffff33;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.wp-xp{background:#3a8dde}
+.wp-laranja{background:#f07818}
+.wp-azul{background:radial-gradient(circle,#2878d8,#071a38)}
+.wp-verde{background:#16853b}
+
+/* TERMINAL */
+
+.terminal{
+    height:320px;
+    background:#000;
+    color:#00ff66;
+    padding:15px;
+    font-family:monospace;
+}
+
+/* MENU */
+
+.menu{
+    position:absolute;
+    width:430px;
+    height:430px;
+    bottom:75px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#0f172af7;
+    border:1px solid #ffffff26;
+    border-radius:18px;
+    padding:20px;
+    display:none;
+    color:white;
+    z-index:100;
+}
+
+.apps{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+}
+
+.app{
+    padding:18px;
+    text-align:center;
+    background:#ffffff12;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+.app:hover{
+    background:#ffffff29;
+}
+
+/* TASKBAR */
+
+.taskbar{
+    position:absolute;
+    left:0;
+    bottom:0;
+    width:100%;
+    height:64px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+    background:#030812d9;
+    backdrop-filter:blur(20px);
+    border-top:1px solid #ffffff26;
+}
+
+.taskbar button{
+    width:45px;
+    height:45px;
+    border:0;
+    border-radius:10px;
+    background:#ffffff14;
+    color:white;
+    font-size:21px;
+    cursor:pointer;
+}
+
+.relogio{
+    position:absolute;
+    right:20px;
+    bottom:23px;
+    color:white;
+    font-size:13px;
+}
+
+/* TELA AZUL DE SEGURANÇA */
+
+#telaSeguranca{
+    position:fixed;
+    inset:0;
+    z-index:999999;
+    background:#0067b8;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family:Arial,sans-serif;
+}
+
+.seguranca-conteudo{
+    width:620px;
+    text-align:center;
+}
+
+.seguranca-robo{
+    font-size:75px;
+}
+
+.seguranca-conteudo h1{
+    font-size:35px;
+    font-weight:normal;
+}
+
+.seguranca-conteudo h2{
+    font-size:25px;
+}
+
+.seguranca-conteudo p{
+    font-size:17px;
+    line-height:1.5;
+}
+
+.arquivo-detectado{
+    background:#0003;
+    padding:15px;
+    border-radius:8px;
+    margin:20px 0;
+    font-family:monospace;
+}
+
+.seguranca-barra{
+    width:100%;
+    height:12px;
+    background:#ffffff40;
+    border-radius:10px;
+    overflow:hidden;
+    margin-top:15px;
+}
+
+#barraSeguranca{
+    width:0;
+    height:100%;
+    background:white;
+    transition:.2s;
+}
+</style>
+</head>
+
+<body>
+
+<div id="desktop">
+
+<div class="logo">WINUX 11</div>
+<div class="edicao">Home Edition</div>
+
+<!-- ÍCONES -->
+
+<div class="icones">
+
+<div class="icone" onclick="abrir('explorer')">
+<div>📁</div>
+<span>Explorer</span>
+</div>
+
+<div class="icone" onclick="abrirPolhing()">
+<div>🌐</div>
+<span>Polhing 1.0</span>
+</div>
+
+<div class="icone" onclick="abrirEditor()">
+<div>🛠️</div>
+<span>Web Studio</span>
+</div>
+
+<div class="icone" onclick="abrir('notepad')">
+<div>📝</div>
+<span>Notepad</span>
+</div>
+
+<div class="icone" onclick="abrir('terminal')">
+<div>💻</div>
+<span>Terminal</span>
+</div>
+
+<div class="icone" onclick="abrir('wallpaper')">
+<div>🖼️</div>
+<span>Papel de parede</span>
+</div>
+
+</div>
+
+<!-- POLHING -->
+
+<div class="janela" id="polhing">
+
+<div class="polhing-top">
+
+<div class="polhing-logo">
+🌐 Polhing 1.0
+</div>
+
+<div id="tabs"></div>
+
+<button class="plus" onclick="novaAba()">+</button>
+
+<div class="polhing-buttons">
+
+<button onclick="abrirEditor()">
+Editor
+</button>
+
+<button onclick="abrirScanner()">
+🛡️
+</button>
+
+<button onclick="fechar('polhing')">
+×
+</button>
+
+</div>
+</div>
+
+<div class="endereco">
+
+<input id="url" value="about:blank">
+
+<button onclick="navegar()">
+Ir
+</button>
+
+</div>
+
+<iframe
+id="webview"
+sandbox="allow-scripts allow-forms">
+</iframe>
+
+</div>
+
+<!-- EDITOR -->
+
+<div class="janela" id="editor">
+
+<div class="editor-top">
+
+<strong>🛠️ Polhing Web Studio</strong>
+
+<button onclick="executarPagina()">
+▶ Executar
+</button>
+
+<button onclick="salvarPagina()">
+💾 Salvar
+</button>
+
+<button onclick="abrirPolhing()">
+🌐 Polhing
+</button>
+
+<button onclick="fechar('editor')">
+×
+</button>
+
+</div>
+
+<div class="editor-grid">
+
+<div class="codigo">
+
+<label>
+HTML5 + CSS3 + JavaScript
+</label>
+
+<textarea id="codigoWeb"><!DOCTYPE html>
+<html>
+<head>
+
+<style>
+
+body{
+    background:#2563eb;
+    color:white;
+    font-family:Arial;
+    text-align:center;
+}
+
+button{
+    padding:15px;
+    border:0;
+    border-radius:10px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>Minha página Polhing</h1>
+
+<p>Winux 11 Web Studio</p>
+
+<button onclick="mensagem()">
+Clique aqui
+</button>
+
+<script>
+
+function mensagem(){
+    alert("Olá do Polhing 1.0!");
+}
+
+</script>
+
+</body>
+</html></textarea>
+
+</div>
+
+<div class="preview">
+
+<iframe
+id="previewFrame"
+sandbox="allow-scripts">
+</iframe>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- SCANNER -->
+
+<div class="janela" id="scanner">
+
+<div class="titulo">
+
+<span>
+🛡️ Polhing Security Scanner
+</span>
+
+<button class="fechar"
+onclick="fechar('scanner')">
+×
+</button>
+
+</div>
+
+<div class="scanner-body">
+
+<div class="scanner-status"
+id="scannerStatus">
+
+Pronto para analisar.
+
+</div>
+
+<div class="progress">
+
+<div class="progress-bar"
+id="progressBar">
+</div>
+
+</div>
+
+<div class="resultados"
+id="resultados">
+
+Aguardando análise...
+
+</div>
+
+</div>
+
+</div>
+
+<!-- EXPLORER -->
+
+<div class="janela" id="explorer">
+
+<div class="titulo">
+
+<span>📁 Winux Explorer</span>
+
+<button class="fechar"
+onclick="fechar('explorer')">
+×
+</button>
+
+</div>
+
+<div class="conteudo">
+
+<h2>Este Computador</h2>
+
+<p>💾 Disco local (C:)</p>
+<p>📁 Documentos</p>
+<p>📁 Downloads</p>
+<p>📁 Imagens</p>
+<p>🌐 Polhing</p>
+<p>🛡️ Polhing Security</p>
+
+</div>
+</div>
+
+<!-- NOTEPAD -->
+
+<div class="janela" id="notepad">
+
+<div class="titulo">
+
+<span>📝 Winux Notepad</span>
+
+<button class="fechar"
+onclick="fechar('notepad')">
+×
+</button>
+
+</div>
+
+<div class="conteudo">
+
+<textarea
+style="width:100%;height:320px;background:#05090e;color:white;border:0;padding:15px;"
+placeholder="Digite aqui..."></textarea>
+
+</div>
+</div>
+
+<!-- TERMINAL -->
+
+<div class="janela" id="terminal">
+
+<div class="titulo">
+
+<span>💻 Winux Terminal</span>
+
+<button class="fechar"
+onclick="fechar('terminal')">
+×
+</button>
+
+</div>
+
+<div class="conteudo">
+
+<div class="terminal">
+
+Winux Terminal 11
+----------------------------
+
+Sistema: Winux 11
+Navegador: Polhing 1.0
+Segurança: Polhing Security
+
+Atalhos:
+
+W + U
+Papel de parede
+
+CTRL + SHIFT + M
+Scanner de vírus
+
+C:\Winux&gt;
+
+</div>
+
+</div>
+</div>
+
+<!-- WALLPAPER -->
+
+<div class="janela" id="wallpaper">
+
+<div class="titulo">
+
+<span>🖼️ Personalização</span>
+
+<button class="fechar"
+onclick="fechar('wallpaper')">
+×
+</button>
+
+</div>
+
+<div class="conteudo">
+
+<h2>Papel de parede</h2>
+
+<div class="wallpapers">
+
+<div class="wallpaper wp-xp"
+onclick="wallpaperXP()">
+AZUL XP
+</div>
+
+<div class="wallpaper wp-laranja"
+onclick="wallpaperLaranja()">
+LARANJA
+</div>
+
+<div class="wallpaper wp-azul"
+onclick="wallpaperAzul()">
+WINUX AZUL
+</div>
+
+<div class="wallpaper wp-verde"
+onclick="wallpaperVerde()">
+VERDE
+</div>
+
+</div>
+</div>
+</div>
+
+<!-- MENU -->
+
+<div class="menu" id="menu">
+
+<h2>Iniciar</h2>
+
+<div class="apps">
+
+<div class="app"
+onclick="abrir('explorer')">
+📁<br>Explorer
+</div>
+
+<div class="app"
+onclick="abrirPolhing()">
+🌐<br>Polhing
+</div>
+
+<div class="app"
+onclick="abrirEditor()">
+🛠️<br>Web Studio
+</div>
+
+<div class="app"
+onclick="abrirScanner()">
+🛡️<br>Scanner
+</div>
+
+<div class="app"
+onclick="abrir('notepad')">
+📝<br>Notepad
+</div>
+
+<div class="app"
+onclick="abrir('terminal')">
+💻<br>Terminal
+</div>
+
+</div>
+</div>
+
+<!-- TASKBAR -->
+
+<div class="taskbar">
+
+<button onclick="menu()">⊞</button>
+
+<button onclick="abrirPolhing()">🌐</button>
+
+<button onclick="abrirEditor()">🛠️</button>
+
+<button onclick="abrirScanner()">🛡️</button>
+
+<button onclick="abrir('explorer')">📁</button>
+
+</div>
+
+<div class="relogio" id="relogio">
+00:00
+</div>
+
+</div>
+
+<script>
+
+/* =====================================================
+   JANELAS
+===================================================== */
+
+function abrir(id){
+
+    document.getElementById(id)
+        .style.display="block";
+
+    document.getElementById("menu")
+        .style.display="none";
+}
+
+function fechar(id){
+
+    document.getElementById(id)
+        .style.display="none";
+}
+
+function menu(){
+
+    const m=document.getElementById("menu");
+
+    m.style.display=
+        m.style.display==="block"
+        ?"none"
+        :"block";
+}
+
+
+/* =====================================================
+   PAPEL DE PAREDE
+===================================================== */
+
+const desktop=
+document.getElementById("desktop");
+
+function wallpaperXP(){
+
+    desktop.style.background="#3a8dde";
+
+    localStorage.setItem(
+        "winux_wallpaper","xp"
+    );
+}
+
+function wallpaperLaranja(){
+
+    desktop.style.background="#f07818";
+
+    localStorage.setItem(
+        "winux_wallpaper","laranja"
+    );
+}
+
+function wallpaperAzul(){
+
+    desktop.style.background=
+        "radial-gradient(circle at 50% 40%,#2878d8,#071a38 60%,#020611)";
+
+    localStorage.setItem(
+        "winux_wallpaper","azul"
+    );
+}
+
+function wallpaperVerde(){
+
+    desktop.style.background="#16853b";
+
+    localStorage.setItem(
+        "winux_wallpaper","verde"
+    );
+}
+
+function carregarWallpaper(){
+
+    const w=
+        localStorage.getItem(
+            "winux_wallpaper"
+        );
+
+    if(w==="xp") wallpaperXP();
+    else if(w==="laranja") wallpaperLaranja();
+    else if(w==="verde") wallpaperVerde();
+    else wallpaperAzul();
+}
+
+carregarWallpaper();
+
+
+/* =====================================================
+   W + U
+===================================================== */
+
+let wPressionado=false;
+
+document.addEventListener(
+"keydown",
+function(e){
+
+    if(e.key.toLowerCase()==="w"){
+        wPressionado=true;
+    }
+
+    if(
+        e.key.toLowerCase()==="u" &&
+        wPressionado
+    ){
+
+        abrir("wallpaper");
+
+    }
+
+});
+
+document.addEventListener(
+"keyup",
+function(e){
+
+    if(e.key.toLowerCase()==="w"){
+        wPressionado=false;
+    }
+
+});
+
+
+/* =====================================================
+   POLHING
+===================================================== */
+
+let abas=[];
+let abaAtual=-1;
+
+function abrirPolhing(){
+
+    abrir("polhing");
+
+    if(abas.length===0){
+        novaAba();
+    }
+}
+
+function novaAba(){
+
+    abas.push({
+        id:Date.now(),
+        url:"about:blank"
+    });
+
+    abaAtual=abas.length-1;
+
+    atualizarAbas();
+
+    document.getElementById("url")
+        .value="about:blank";
+
+    document.getElementById("webview")
+        .src="about:blank";
+}
+
+function atualizarAbas(){
+
+    const tabs=
+        document.getElementById("tabs");
+
+    tabs.innerHTML="";
+
+    abas.forEach(
+    (aba,index)=>{
+
+        const div=
+            document.createElement("div");
+
+        div.className=
+            "tab "+
+            (index===abaAtual
+            ?"active":"");
+
+        div.innerHTML=
+            "Nova página"+
+            '<span class="tab-close">×</span>';
+
+        div.onclick=function(e){
+
+            if(
+                e.target.classList
+                .contains("tab-close")
+            ){
+
+                fecharAba(index);
+
+            }else{
+
+                selecionarAba(index);
+
+            }
+
+        };
+
+        tabs.appendChild(div);
+
+    });
+}
+
+function selecionarAba(index){
+
+    abaAtual=index;
+
+    document.getElementById("url")
+        .value=abas[index].url;
+
+    document.getElementById("webview")
+        .src=abas[index].url;
+
+    atualizarAbas();
+}
+
+function fecharAba(index){
+
+    abas.splice(index,1);
+
+    if(abas.length===0){
+
+        novaAba();
+
+        return;
+    }
+
+    if(abaAtual>=abas.length){
+
+        abaAtual=
+            abas.length-1;
+
+    }
+
+    selecionarAba(abaAtual);
+}
+
+function navegar(){
+
+    let url=
+        document.getElementById("url")
+        .value.trim();
+
+    if(!url)return;
+
+    if(
+        !url.startsWith("http://") &&
+        !url.startsWith("https://") &&
+        !url.startsWith("about:")
+    ){
+
+        url=
+            "https://www.google.com/search?q="+
+            encodeURIComponent(url);
+
+    }
+
+    abas[abaAtual].url=url;
+
+    document.getElementById("webview")
+        .src=url;
+}
+
+
+/* =====================================================
+   EDITOR WEB
+===================================================== */
+
+function abrirEditor(){
+
+    abrir("editor");
+
+}
+
+function executarPagina(){
+
+    const codigo=
+        document.getElementById(
+            "codigoWeb"
+        ).value;
+
+    document.getElementById(
+        "previewFrame"
+    ).srcdoc=codigo;
+}
+
+function salvarPagina(){
+
+    const codigo=
+        document.getElementById(
+            "codigoWeb"
+        ).value;
+
+    localStorage.setItem(
+        "polhing_pagina",
+        codigo
+    );
+
+    alert(
+        "Página salva no Polhing 1.0."
+    );
+}
+
+function carregarPagina(){
+
+    const codigo=
+        localStorage.getItem(
+            "polhing_pagina"
+        );
+
+    if(codigo){
+
+        document.getElementById(
+            "codigoWeb"
+        ).value=codigo;
+
+    }
+}
+
+carregarPagina();
+
+
+/* =====================================================
+   POLHING SECURITY
+===================================================== */
+
+let sistemaProtegido=true;
+
+function verificarSistema(){
+
+    const virus=
+        localStorage.getItem(
+            "winux_virus_virtual"
+        );
+
+    if(virus){
+
+        detectarAmeaca(virus);
+
+    }else{
+
+        console.log(
+            "Polhing Security: sistema limpo."
+        );
+
+    }
+}
+
+function detectarAmeaca(nome){
+
+    if(!sistemaProtegido)return;
+
+    sistemaProtegido=false;
+
+    entrarTelaSeguranca(nome);
+}
+
+function entrarTelaSeguranca(nome){
+
+    const tela=
+        document.createElement("div");
+
+    tela.id="telaSeguranca";
+
+    tela.innerHTML=`
+
+    <div class="seguranca-conteudo">
+
+        <div class="seguranca-robo">
+            🛡️
+        </div>
+
+        <h1>
+            Winux Security
+        </h1>
+
+        <h2>
+            AMEAÇA DETECTADA
+        </h2>
+
+        <p>
+            O Polhing Security encontrou
+            um arquivo suspeito.
+        </p>
+
+        <div class="arquivo-detectado">
+
+            Arquivo:
+            <strong>${nome}</strong>
+
+        </div>
+
+        <p id="mensagemSeguranca">
+            Analisando sistema...
+        </p>
+
+        <div class="seguranca-barra">
+
+            <div id="barraSeguranca"></div>
+
+        </div>
+
+    </div>
+    `;
+
+    document.body.appendChild(tela);
+
+    let progresso=0;
+
+    const intervalo=
+        setInterval(()=>{
+
+            progresso+=10;
+
+            const barra=
+                document.getElementById(
+                    "barraSeguranca"
+                );
+
+            if(barra){
+
+                barra.style.width=
+                    progresso+"%";
+
+            }
+
+            const msg=
+                document.getElementById(
+                    "mensagemSeguranca"
+                );
+
+            if(msg){
+
+                if(progresso<30){
+
+                    msg.innerText=
+                        "Analisando arquivo...";
+
+                }else if(progresso<70){
+
+                    msg.innerText=
+                        "Isolando ameaça...";
+
+                }else if(progresso<100){
+
+                    msg.innerText=
+                        "Removendo ameaça...";
+
+                }else{
+
+                    msg.innerText=
+                        "✓ Ameaça removida.";
+
+                }
+
+            }
+
+            if(progresso>=100){
+
+                clearInterval(intervalo);
+
+                removerVirusVirtual();
+
+            }
+
+        },250);
+}
+
+function removerVirusVirtual(){
+
+    /*
+       Remove somente o marcador de ameaça
+       criado pelo ambiente virtual Winux.
+    */
+
+    localStorage.removeItem(
+        "winux_virus_virtual"
+    );
+
+    setTimeout(()=>{
+
+        const tela=
+            document.getElementById(
+                "telaSeguranca"
+            );
+
+        if(tela)tela.remove();
+
+        sistemaProtegido=true;
+
+        console.log(
+            "Winux voltou ao funcionamento normal."
+        );
+
+    },1500);
+}
+
+
+/* =====================================================
+   SCANNER MANUAL
+===================================================== */
+
+function abrirScanner(){
+
+    abrir("scanner");
+
+    iniciarScanner();
+}
+
+function iniciarScanner(){
+
+    const resultado=
+        document.getElementById(
+            "resultados"
+        );
+
+    const status=
+        document.getElementById(
+            "scannerStatus"
+        );
+
+    const barra=
+        document.getElementById(
+            "progressBar"
+        );
+
+    resultado.innerHTML="";
+
+    barra.style.width="0%";
+
+    status.innerText=
+        "Iniciando análise...";
+
+    const codigo=
+        document.getElementById(
+            "codigoWeb"
+        ).value;
+
+    const verificacoes=[
+
+        ["Estrutura HTML",
+            codigo.includes("<html")],
+
+        ["JavaScript",
+            codigo.includes("<script")],
+
+        ["Iframe",
+            codigo.includes("<iframe")],
+
+        ["Eventos",
+            codigo.includes("onclick") ||
+            codigo.includes("onload")],
+
+        ["eval()",
+            codigo.includes("eval(")],
+
+        ["Redirecionamento",
+            codigo.includes("location.href") ||
+            codigo.includes("window.location")]
+
+    ];
+
+    let i=0;
+
+    function verificar(){
+
+        if(i>=verificacoes.length){
+
+            barra.style.width="100%";
+
+            status.innerText=
+                "Análise concluída.";
+
+            resultado.innerHTML+=
+                '<div class="ok">'+
+                "✓ Scanner finalizado."+
+                "</div>";
+
+            return;
+        }
+
+        const item=
+            verificacoes[i];
+
+        barra.style.width=
+            ((i+1)/verificacoes.length*100)+"%";
+
+        if(item[1]){
+
+            resultado.innerHTML+=
+                '<div class="alerta">'+
+                "⚠ "+item[0]+
+                ": encontrado para revisão."+
+                "</div>";
+
+        }else{
+
+            resultado.innerHTML+=
+                '<div class="ok">'+
+                "✓ "+item[0]+
+                ": OK."+
+                "</div>";
+
+        }
+
+        i++;
+
+        setTimeout(verificar,300);
+    }
+
+    verificar();
+}
+
+
+/* =====================================================
+   CTRL + SHIFT + M
+===================================================== */
+
+document.addEventListener(
+"keydown",
+function(e){
+
+    if(
+        e.ctrlKey &&
+        e.shiftKey &&
+        e.key.toLowerCase()==="m"
+    ){
+
+        e.preventDefault();
+
+        abrirScanner();
+
+    }
+
+});
+
+
+/* =====================================================
+   TESTE DE AMEAÇA VIRTUAL
+===================================================== */
+
+/*
+   Esta função serve somente para testar
+   o sistema de segurança do Winux.
+
+   Ela NÃO cria um vírus real.
+*/
+
+function simularVirus(){
+
+    localStorage.setItem(
+        "winux_virus_virtual",
+        "virus_teste.wvx"
+    );
+
+    verificarSistema();
+}
+
+
+/* =====================================================
+   MONITORAMENTO AUTOMÁTICO
+===================================================== */
+
+/*
+   A cada 2 minutos:
+   120000 ms = 2 minutos.
+*/
+
+setInterval(
+function(){
+
+    verificarSistema();
+
+},
+120000);
+
+
+/*
+   Primeira análise após 10 segundos.
+*/
+
+setTimeout(
+function(){
+
+    verificarSistema();
+
+},
+10000);
+
+
+/* =====================================================
+   RELÓGIO
+===================================================== */
+
+function atualizarRelogio(){
+
+    const d=new Date();
+
+    const h=
+        String(d.getHours())
+        .padStart(2,"0");
+
+    const m=
+        String(d.getMinutes())
+        .padStart(2,"0");
+
+    document.getElementById(
+        "relogio"
+    ).innerText=
+        h+":"+m;
+}
+
+setInterval(
+    atualizarRelogio,
+    1000
+);
+
+atualizarRelogio();
+
+</script>
+
+</body>
+</html>
